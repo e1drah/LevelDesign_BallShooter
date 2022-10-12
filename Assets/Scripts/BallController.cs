@@ -13,6 +13,9 @@ public class BallController : MonoBehaviour
 
     public bool ballStopped;
 
+    //My Varibles
+    private int bounce;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +28,7 @@ public class BallController : MonoBehaviour
     void Update()
     {
         ballSpeed = rb_ball.angularVelocity.magnitude;
-        Debug.Log(ballSpeed);
+        //Debug.Log(ballSpeed);
 
         
 
@@ -37,11 +40,11 @@ public class BallController : MonoBehaviour
     }    
 
 
-    public void ballShoot() // adds force to ball in a direction away from camera
+    public void ballShoot(float timeXForce) // adds force to ball in a direction away from camera
     {
         rb_ball = this.GetComponent<Rigidbody>();
         aimGuide = GameObject.Find("AimGuide");
-        rb_ball.AddForce(aimGuide.transform.forward * 25, ForceMode.VelocityChange);
+        rb_ball.AddForce(aimGuide.transform.forward * timeXForce, ForceMode.VelocityChange);
     }    
 
 
@@ -51,7 +54,7 @@ public class BallController : MonoBehaviour
         rb_ball.isKinematic = true;
         rb_ball.isKinematic = false;
     }
-
+    
 
 
 }

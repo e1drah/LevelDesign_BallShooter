@@ -47,6 +47,9 @@ public class GameManager : MonoBehaviour
     private GameState gameState;
     private GameState LastGameState;
 
+    //Jacob Hardie varibles
+    private float holdTimeStart;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -83,16 +86,34 @@ public class GameManager : MonoBehaviour
                 GameCompleteUI.SetActive(false);
                 LevelFailUI.SetActive(false);
 
-                _uIManager.modeText.text = "Aim with MOUSE \n & \n Shoot with SPACE";
+                _uIManager.modeText.text = "Aim with MOUSE \n & \n Hold SPACE  to shoot";
 
                 aimGuideMesh.SetActive(true);
-
+                
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
+                    //aimGuideMesh.SetActive(false);
+                    //_ballController.ballShoot();
+                    //shotsLeft -= 1;
+                    //_uIManager.UpdateShotsleft(shotsLeft);
+                    //gameState = GameState.Rolling;
+                    //TimeDelay(0.1f);
+                    holdTimeStart = Time.time;
+                }
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    //Slider controller
+                    float holdtime = Time.time - holdTimeStart;
+                    _uIManager.SliderUpdate(MaxForceCal(holdtime));
+                }
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    float holdtime = Time.time - holdTimeStart;
+                    _ballController.ballShoot(MaxForceCal(holdtime));
                     aimGuideMesh.SetActive(false);
-                    _ballController.ballShoot();
                     shotsLeft -= 1;
                     _uIManager.UpdateShotsleft(shotsLeft);
+                    _uIManager.SliderUpdate(0);
                     gameState = GameState.Rolling;
                     TimeDelay(0.1f);
                 }
@@ -278,7 +299,16 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         gameState = LastGameState;
     }
-    
+    //Calculate force based on how long the space button is pressed
+    private float MaxForceCal(float holdTimecal)
+    {
+        float maxHoldTime = 2f;
+        float holdTimeNormilized = Mathf.Clamp01(holdTimecal / maxHoldTime);
+        Debug.Log("holdTimeNormilized" + holdTimeNormilized);
+        float force = holdTimeNormilized * 25f;
+        Debug.Log("force " + force);
+        return force;
+    }
 
 
 

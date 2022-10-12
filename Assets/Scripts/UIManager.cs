@@ -19,7 +19,9 @@ public class UIManager : MonoBehaviour
     public Text ShotsLeftCount;
 
     public Text LevelCount;
-    
+
+    public Slider Slider;
+
     public void UpdateShotsleft(int count)
     {        
         ShotsLeftCount.text = count.ToString();
@@ -30,6 +32,9 @@ public class UIManager : MonoBehaviour
         LevelCount.text = count.ToString();
     }
         
-
+    public void SliderUpdate(float holdTime)
+    {
+        Slider.value = holdTime;
+    }
 
 }
